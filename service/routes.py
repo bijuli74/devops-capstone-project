@@ -50,9 +50,7 @@ def create_accounts():
     account.deserialize(request.get_json())
     account.create()
     message = account.serialize()
-    # Uncomment once get_accounts has been implemented
     location_url = url_for("get_accounts", account_id=account.id, _external=True)
-    # location_url = "/"  # Remove once get_accounts has been implemented
     return make_response(
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
@@ -64,16 +62,20 @@ def create_accounts():
 @app.route("/accounts", methods=["GET"])
 def get_accounts():
     """ Fetches all the Accounts """
+    app.logger.info("Request to list Accounts")
     accounts = list(Account.all())
-    return make_response(jsonify(accounts), status.HTTP_200_OK)
+    serialized_accounts = [account.serialize() for account in accounts]
+    return make_response(jsonify(serialized_accounts), status.HTTP_200_OK)
 
 ######################################################################
 # READ AN ACCOUNT
 ######################################################################
 
 @app.route("/accounts/<int:account_id>", methods=["GET"])
-def read_account(account_id):
+def get_account(account_id):
     """ Read details of an Account with account id """ 
+    app.logger.info("Request to read an Account with id: %s", account_id)
+
     account = Account.find(account_id)
     if account is None:
         abort(status.HTTP_404_NOT_FOUND, "Account not found")
@@ -101,7 +103,7 @@ def update_account(account_id):
 # DELETE AN ACCOUNT
 ######################################################################
 
-@app.route("/accounts/<int:id>", methods=["DELETE"])
+@app.route("/accounts/<int:account_id>", methods=["DELETE"])
 def delete_an_account(account_id):
     """ Delete an account with an account id """
     account = account.find(account_id)
@@ -125,3 +127,4 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {media_type}",
     )
+
