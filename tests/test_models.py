@@ -8,6 +8,7 @@ import os
 from service import app
 from service.models import Account, DataValidationError, db
 from tests.factories import AccountFactory
+from datetime import date
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -175,3 +176,17 @@ class TestAccount(unittest.TestCase):
         """It should not Deserialize an account with a TypeError"""
         account = Account()
         self.assertRaises(DataValidationError, account.deserialize, [])
+
+    def test_init(self):
+        """It should test __init__ """
+        account = Account()
+        self.assertIsNone(account.id)
+    
+    def test_repr(self):
+        """It should test __repr__ """
+        account = Account(name="John Doe", id=1)
+        expected_repr = "<Account John Doe id=[1]>"
+        self.assertEqual(repr(account), expected_repr)
+    
+
+    
