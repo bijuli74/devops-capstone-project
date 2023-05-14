@@ -1,4 +1,4 @@
-# Pin dependancies that might cause breakage
+# Pin dependencies that might cause breakage
 Werkzeug==2.2.2
 
 # Build dependencies
@@ -10,6 +10,9 @@ python-dotenv==0.21.1
 # Runtime dependencies
 gunicorn==20.1.0
 honcho==1.1.0
+Flask-Talisman==0.8.0
+Flask-Cors
+
 
 # Code quality
 pylint==2.15.10
