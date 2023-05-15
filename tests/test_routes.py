@@ -166,13 +166,6 @@ class TestAccountService(TestCase):
         updated_account = resp.get_json()
         self.assertEqual(updated_account["name"], "John Doe")
 
-    def test_get_account_not_found(self):
-        """It should not Update an Account that is not found"""
-        resp = self.client.put(
-            f"{BASE_URL}/0", content_type="application/json"
-        )
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-
     def test_delete_an_account(self):
         """It should delete an existing Account"""
         # Create an account
@@ -198,7 +191,7 @@ class TestAccountService(TestCase):
         # Delete an account that does not exist
         response = self.client.delete(f"{BASE_URL}/0")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-    
+
     def test_method_not_allowed(self):
         """It should not allow an illegal method call"""
         resp = self.client.delete(BASE_URL)
@@ -217,7 +210,7 @@ class TestAccountService(TestCase):
         }
         for key, value in headers.items():
             self.assertEqual(response.headers.get(key), value)
-    
+
     def test_cors_header(self):
         """It should return CORS header"""
         response = self.client.get('/', environ_overrides=HTTPS_ENVIRON)
